@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate manifest
+        run: npx vici lint
+
+      - name: Build extension
+        run: npx vici build -o dist
+
+      - name: Package extension
+        id: package
+        run: |
+          set -euo pipefail
+          NAME="audio-switcher"
+          VERSION="${GITHUB_REF_NAME#v}"
+          # Stage the built extension inside a folder named after the extension,
+          # so users can drop it straight into ~/.local/share/vicinae/extensions/
+          rm -rf staging
+          mkdir -p "staging/${NAME}"
+          cp -r dist/. "staging/${NAME}/"
+          ( cd staging && zip -r "../${NAME}-${VERSION}.zip" "${NAME}" >/dev/null )
+          ( cd staging && tar -czf "../${NAME}-${VERSION}.tar.gz" "${NAME}" )
+          echo "name=${NAME}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          NAME="${{ steps.package.outputs.name }}"
+          VERSION="${{ steps.package.outputs.version }}"
+          gh release create "$GITHUB_REF_NAME" \
+            --title "Audio Switcher $GITHUB_REF_NAME" \
+            --generate-notes \
+            "${NAME}-${VERSION}.zip" \
+            "${NAME}-${VERSION}.tar.gz"

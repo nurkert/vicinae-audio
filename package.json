@@ -1,0 +1,66 @@
+{
+  "$schema": "https://raw.githubusercontent.com/vicinaehq/vicinae/refs/heads/main/extra/schemas/extension.json",
+  "name": "audio-switcher",
+  "title": "Audio Switcher",
+  "version": "1.0.0",
+  "description": "Quickly list and switch the default audio output and input devices via PipeWire / wpctl",
+  "categories": [
+    "System"
+  ],
+  "license": "MIT",
+  "author": "nurkert",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nurkert/vicinae-audio.git"
+  },
+  "homepage": "https://github.com/nurkert/vicinae-audio",
+  "bugs": "https://github.com/nurkert/vicinae-audio/issues",
+  "icon": "icon.png",
+  "commands": [
+    {
+      "name": "set-output",
+      "title": "Set Audio Output",
+      "subtitle": "Audio Switcher",
+      "description": "List speakers/headphones and set the default audio output device",
+      "keywords": ["audio", "output", "sink", "speaker", "headphones", "sound", "set"],
+      "mode": "view"
+    },
+    {
+      "name": "set-input",
+      "title": "Set Audio Input",
+      "subtitle": "Audio Switcher",
+      "description": "List microphones and set the default audio input device",
+      "keywords": ["audio", "input", "source", "microphone", "mic", "set"],
+      "mode": "view"
+    },
+    {
+      "name": "route-app",
+      "title": "Route App Audio",
+      "subtitle": "Audio Switcher",
+      "description": "Send a specific application's audio to a chosen output or input device",
+      "keywords": ["audio", "route", "app", "application", "stream", "move", "chromium", "browser", "per-app"],
+      "mode": "view"
+    },
+    {
+      "name": "audio-devices",
+      "title": "Audio Devices",
+      "subtitle": "Audio Switcher",
+      "description": "Switch audio output and input devices and route apps from one place",
+      "keywords": ["audio", "devices", "output", "input", "sound", "switch", "sink", "source"],
+      "mode": "view"
+    }
+  ],
+  "scripts": {
+    "build": "vici build",
+    "dev": "vici develop"
+  },
+  "dependencies": {
+    "@vicinae/api": "^0.21.6",
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.10",
+    "typescript": "^5.9.2"
+  }
+}
